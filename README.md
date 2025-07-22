@@ -50,7 +50,6 @@ Username: admin
 
 Password: admin
 
-🖼️ You can add a screenshot of the dashboard login here:
 <img src="screenshots_wazuh/Login%20details.jpg" alt="Login details" width="400"/>
 
 
