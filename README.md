@@ -15,7 +15,7 @@ This guide will walk you through installing Wazuh (Manager, Dashboard, Filebeat,
 
 ## 1. 🧰 System Update & Required Packages
 
-```bash
+bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install curl unzip wget gnupg apt-transport-https lsb-release software-properties-common -y
 
