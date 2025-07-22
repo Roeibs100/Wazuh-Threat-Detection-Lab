@@ -76,4 +76,7 @@ sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
 
 
+<img src="screenshots_wazuh/Wazuh-3.webp" alt="Wazuh screenshot" width="400"/>
+
+
 
