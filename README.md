@@ -1,90 +1,79 @@
-# 🛡️ Wazuh Threat Detection Lab
+# 🛡️ Wazuh Installation on Ubuntu (Self-Hosted)
 
-A full lab setup for installing and using Wazuh to detect endpoint threats.  
-Includes server installation, agent setup, alert visualization, and a sample incident report.
-
----
-
-## 📌 Table of Contents
-- 🎯 Learning Objectives
-- 🧱 Wazuh Server Installation
-- 🛰️ Wazuh Agent Installation (Windows)
-- 📸 Screenshots & Diagrams
-- 📝 Sample SOC Report
-- 🧰 Technologies Used
-- 📂 Project Structure
+This guide will walk you through installing Wazuh (Manager, Dashboard, Filebeat, and Elasticsearch/OpenSearch) on Ubuntu. It’s ideal for learning, SOC simulation, and threat detection use cases.
 
 ---
 
-## 🎯 Learning Objectives
-- Deploy a Wazuh All-In-One server
-- Install and register a Windows agent
-- Generate detection alerts based on suspicious activity
-- Analyze and report incidents in a SOC-style format
+## 📌 Prerequisites
+
+- Fresh Ubuntu 20.04/22.04 machine (VM or cloud)
+- sudo privileges
+- 4GB RAM minimum (8GB recommended)
+- Internet access
 
 ---
 
-## 🧱 Wazuh Server Installation
+## 1. 🧰 System Update & Required Packages
 
 ```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install curl unzip wget gnupg apt-transport-https lsb-release software-properties-common -y
+
+
+2. 📥 Download and Run Wazuh Installation Script
+
 curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
-sudo bash ./wazuh-install.sh -a --ignore-check
-```
+chmod +x wazuh-install.sh
+sudo ./wazuh-install.sh --wazuh-manager --dashboard --filebeat
 
-📍 After installation:  
-Access the dashboard at: `https://<server-ip>:5601`
 
-(See `setup/install_wazuh_server.md` for full guide.)
+3. ✅ Verify Wazuh Services Are Running
 
----
+sudo systemctl status wazuh-manager
+sudo systemctl status wazuh-dashboard
+sudo systemctl status filebeat
 
-## 🛰️ Wazuh Agent Installation (Windows)
 
-1. Download MSI: https://packages.wazuh.com/4.x/windows/wazuh-agent-4.7.2.msi  
-2. Server IP: `<your-wazuh-server-ip>`  
-3. Group: `default`
+If needed:
 
-Run:
-```cmd
-sc start wazuh
-```
+sudo systemctl restart wazuh-manager
+sudo systemctl restart wazuh-dashboard
+sudo systemctl restart filebeat
 
-(See `setup/install_agent_windows.md` for full guide.)
 
----
+4. 🌐 Access Wazuh Dashboard
+Open your browser: https://<YOUR_SERVER_IP>
 
-## 📸 Screenshots & Diagrams
+Default credentials:
 
-| Wazuh Architecture | Sample Alert |
-|-------------------|-------------|
-| ![Arch](alerts/screenshots_alerts/wazuh_architecture.png) | ![Alert](alerts/screenshots_alerts/example_alert.png) |
+Username: admin
 
----
+Password: admin
 
-## 📝 Sample SOC Report
+🖼️ You can add a screenshot of the dashboard login here:
+![Dashboard Login](images/dashboard-login.png)
 
-See: `report/incident_report.md`
 
----
 
-## 🧰 Technologies Used
+5. 🤖 Add a Wazuh Agent (Local Test)
+Install agent on the same machine (optional for local monitoring):
 
-Linux, Bash, Windows, Wazuh, SOC Practices
+curl -sO https://packages.wazuh.com/4.7/wazuh-agent.deb
+sudo dpkg -i wazuh-agent.deb
 
----
 
-## 📂 Project Structure
+Edit agent config:
 
-```
-Wazuh-Threat-Detection-Lab/
-├── README.md
-├── setup/
-│   ├── install_wazuh_server.md
-│   └── install_agent_windows.md
-├── alerts/
-│   └── screenshots_alerts/
-│       ├── wazuh_architecture.png
-│       └── example_alert.png
-├── report/
-│   └── incident_report.md
-```
+sudo nano /var/ossec/etc/ossec.conf
+Replace manager IP:
+
+<server>
+  <address>your IP </address>
+</server>
+Start agent:
+
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+
+
+
