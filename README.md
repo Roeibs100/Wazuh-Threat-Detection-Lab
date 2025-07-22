@@ -51,7 +51,7 @@ Username: admin
 Password: admin
 
 🖼️ You can add a screenshot of the dashboard login here:
-![Dashboard Login](images/dashboard-login.png)
+![Login details](screenshots_wazuh/Login%20details.jpg)
 
 
 
